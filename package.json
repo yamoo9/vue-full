@@ -1,0 +1,13 @@
+{
+  "name": "yamoo9--vue-full",
+  "version": "2.0.0",
+  "license": "MIT",
+  "description": "Vue 프로젝트 스케폴딩 템플릿 Full Version (Webpack, hot-reload, ESLint 린팅, 유닛 테스트 & CSS 출력 포함)",
+  "scripts": {
+    "docs": "cd docs && gitbook serve",
+    "docs:deploy": "bash ./deploy-docs.sh"
+  },
+  "devDependencies": {
+    "vue-cli": "^2.8.1"
+  }
+}
