@@ -1,10 +1,11 @@
-# vue-webpack-boilerplate
+# vue-full
 
 Vue 프로젝트 템플릿 Full Version. (Webpack, hot-reload, ESLint 문법 검사, 유닛 테스트, CSS 추출)
 
 ## 문서
 
-- [GitBook](http://yamoo9.github.io/vue-full)
+<!-- - [GitBook](http://yamoo9.github.io/vue-full) -->
+- [GitBook: vuejs-templates.github.io/webpack](https://vuejs-templates.github.io/webpack/)
 
 ## 사용법
 

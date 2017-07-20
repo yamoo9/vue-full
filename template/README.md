@@ -33,4 +33,5 @@ npm test
 {{/if_or}}
 ```
 
-보다 자세한 사용법은 [가이드](http://yamoo9.github.io/vue-full/), [vue-loader 문서(한국어 번역)](https://vue-loader.vuejs.org/kr/)를 읽어보세요.
+<!-- 보다 자세한 사용법은 [가이드](http://yamoo9.github.io/vue-full/), [vue-loader 문서(한국어 번역)](https://vue-loader.vuejs.org/kr/)를 읽어보세요. -->
+보다 자세한 사용법은 [가이드](https://vuejs-templates.github.io/webpack/), [vue-loader 문서(한국어 번역)](https://vue-loader.vuejs.org/kr/)를 읽어보세요.
