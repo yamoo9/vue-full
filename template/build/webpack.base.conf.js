@@ -1,6 +1,6 @@
-let path = require('path')
-let utils = require('./utils')
-let config = require('../config')
+let path            = require('path')
+let utils           = require('./utils')
+let config          = require('../config')
 let vueLoaderConfig = require('./vue-loader.conf')
 
 function resolve (dir) {

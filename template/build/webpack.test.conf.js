@@ -1,8 +1,8 @@
 // 단위 테스트에 사용되는 webpack 구성입니다.
 
-let utils = require('./utils')
-let webpack = require('webpack')
-let merge = require('webpack-merge')
+let utils      = require('./utils')
+let webpack    = require('webpack')
+let merge      = require('webpack-merge')
 let baseConfig = require('./webpack.base.conf')
 
 let webpackConfig = merge(baseConfig, {

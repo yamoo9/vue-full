@@ -1,44 +1,48 @@
-# Handling Static Assets
+# 정적 에셋 핸들링
 
-You will notice in the project structure we have two directories for static assets: `src/assets` and `static/`. What is the difference between them?
+프로젝트 구조 상 에셋을 관리하는 디렉토리는 `src/assets`, `static/` 입니다. 각 디렉토리는 어떤 차이가 있을까요?
 
-### Webpacked Assets
+### Webpack에서 에셋을 관리하는 방법
 
-To answer this question, we first need to understand how Webpack deals with static assets. In `*.vue` components, all your templates and CSS are parsed by `vue-html-loader` and `css-loader` to look for asset URLs. For example, in `<img src="./logo.png">` and `background: url(./logo.png)`, `"./logo.png"` is a relative asset path and will be **resolved by Webpack as a module dependency**.
+먼저 Webpack이 `*.vue` 컴포넌트 파일 내의 템플릿, CSS를 각각 `vue-html-loader`, `css-loader`로 해석하여 정적 에셋을 처리하는 방법(asset URLs)에 대해 이해해야 합니다.
+예를 들어 `<img src="./logo.png">`, `background: url("./logo.png")`, `"./logo.png"` 와 같이 에셋의 상대 경로를 사용하면 **Webpack이 이를 모듈을 통해 처리해줍니다.**
 
-Because `logo.png` is not JavaScript, when treated as a module dependency, we need to use `url-loader` and `file-loader` to process it. This boilerplate has already configured these loaders for you, so you basically get features such as filename fingerprinting and conditional base64 inlining for free, while being able to use relative/module paths without worrying about deployment.
+`logo.png` 파일은 JavaScript가 아니라서 그대로 번들링되지 않습니다. 하여 Webpack은 의존 모듈 `url-loader`, `file-loader`을 통해 그래픽 파일을 번들링 처리합니다.
+로더 설정은 이미 `yamoo9/vue-full` 템플릿에 구성되어 있기 때문에 별도로 구성하실 필요는 없습니다. Vue 파일에 추가한 상대 경로를 통해 로더는 파일 이름 및 식별자,
+조건 처리된 base64 인코딩 처리된 코드를 사용할 수 있도록 처리해줍니다.
 
-Since these assets may be inlined/copied/renamed during build, they are essentially part of your source code. This is why it is recommended to place Webpack-processed static assets inside `/src`, along side other source files. In fact, you don't even have to put them all in `/src/assets`: you can organize them based on the module/component using them. For example, you can put each component in its own directory, with its static assets right next to it.
+이렇게 처리된 에셋은 본질적으로 소스 코드이며, 빌드되는 동안 인라인/복사/이름변경이 가능합니다. 이런 이유로 Webpack이 처리할 정적 에셋을 `./src` 디렉토리 내에 포함하는 것을 권장합니다.
+관리된 에셋은 모듈/컴포넌트에서 사용할 수 있습니다. 그렇다고 해서 모든 파일을 `/src/assets` 디렉토리 안에 넣어야 할 필요는 없습니다.
 
-### Asset Resolving Rules
+### 에셋 처리 규칙
 
-- **Relative URLs**, e.g. `./assets/logo.png` will be interpreted as a module dependency. They will be replaced with an auto-generated URL based on your Webpack output configuration.
+- **./ 상대 경로 URL**, `./assets/logo.png` 경로 사용 시, 의존 모듈이 처리합니다. 이 파일은 Webpack의 출력 설정에 기반하여 자동으로 URL 처리합니다.
 
-- **Non-prefixed URLs**, e.g. `assets/logo.png` will be treated the same as the relative URLs and translated into `./assets/logo.png`.
+- **./ 생략된 상대경로 URL**, `assets/logo.png` 의 경우, `./assets/logo.png`로 자동 변경되어 처리됩니다.
 
-- **URLs prefixed with `~`** are treated as a module request, similar to `require('some-module/image.png')`. You need to use this prefix if you want to leverage Webpack's module resolving configurations. For example if you have a resolve alias for `assets`, you need to use `<img src="~assets/logo.png">` to ensure that alias is respected.
+- **`~` 접두사를 사용한 URL** `require('some-module/image.png')` 구문처럼 모듈 요청 처리합니다. `~` 접두사는 Webpack 환경설정에 등록된 구성을 사용합니다. 예를 들어 `assets` 별칭(Alias)를 등록한 후, `<img src="~assets/logo.png">` 처럼 사용할 수 있습니다.
 
-- **Root-relative URLs**, e.g. `/assets/logo.png` are not processed at all.
+- **절대 경로 URL**, `/assets/logo.png`의 경우, 처리되지 않습니다.
 
-### Getting Asset Paths in JavaScript
+### JavaScript에서 에셋 경로 가져오기
 
-In order for Webpack to return the correct asset paths, you need to use `require('./relative/path/to/file.jpg')`, which will get processed by `file-loader` and returns the resolved URL. For example:
+Webpack이 에셋 경로를 올바르게 처리하려면 `require('./relative/path/to/file.jpg')`를 사용해야 하며, `file-loader`를 통해 처리된 URL을 반환받습니다.
 
 ``` js
 computed: {
   background () {
-    return require('./bgs/' + this.id + '.jpg')
+    return require('./bgs/' + this.id + '.jpg');
   }
 }
 ```
 
-**Note the above example will include every image under `./bgs/` in the final build.** This is because Webpack cannot guess which of them will be used at runtime, so it includes them all.
+**위의 예는 최종 빌드된 결과에 `./bgs/` 내부 이미지를 포함합니다.** Webpack은 런타임(runtime) 중에 어떤 에셋 자원이 사용될 것인지 알 수 없기 때문에 모두 포함합니다.
 
-### "Real" Static Assets
+### 진짜 정적 에셋
 
-In comparison, files in `static/` are not processed by Webpack at all: they are directly copied to their final destination as-is, with the same filename. You must reference these files using absolute paths, which is determined by joining `build.assetsPublicPath` and `build.assetsSubDirectory` in `config.js`.
-
-As an example, with the following default values:
+`static/` 디렉토리 내부 파일은 Webpack 로더에 의해 처리되지 않으며, 내부의 파일들은 최종 결과에 직접 복사됩니다.
+`config/index.js` 파일의 `build.assetsPublicPath` 또는 `build.assetsSubDirectory`에 설정된 절대 경로에서 직접 파일을 참조합니다.
+템플릿은 다음 값을 기본으로 사용합니다.
 
 ``` js
 // config/index.js
@@ -51,6 +55,7 @@ module.exports = {
 }
 ```
 
-Any file placed in `static/` should be referenced using the absolute URL `/static/[filename]`. If you change `assetSubDirectory` to `assets`, then these URLs will need to be changed to `/assets/[filename]`.
+`static/` 디렉토리에 배치된 파일은 절대 경로 URL을 사용하여 참조해야 합니다. `/static/[filename]`.
+만약 `assetSubDirectory` 설정을 `assets`으로 변경하면 `/assets/[filename]`로 사용해야 합니다.
 
-We will learn more about the config file in the section about [backend integration](backend.md).
+[백엔드 프레임워크에 통합](./backend.md)에서 `config` 파일에 대해 보다 자세히 공부할 수 있습니다.
