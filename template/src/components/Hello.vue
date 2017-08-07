@@ -10,14 +10,14 @@
 </template>
 
 <script>
-export default {
-  name: 'hello',
-  data{{#unless_eq lintConfig "airbnb"}} {{/unless_eq}}() {
-    return {
-      msg: 'Vue.js 앱 개발을 시작해볼까요?'{{#if_eq lintConfig "airbnb"}},{{/if_eq}}
-    }{{#if_eq lintConfig "airbnb"}};{{/if_eq}}
-  }{{#if_eq lintConfig "airbnb"}},{{/if_eq}}
-}{{#if_eq lintConfig "airbnb"}};{{/if_eq}}
+  export default {
+    name: 'hello',
+    data{{#unless_eq lintConfig "airbnb"}} {{/unless_eq}}() {
+      return {
+        msg: 'Vue.js 앱 개발을 시작해볼까요?'{{#if_eq lintConfig "airbnb"}},{{/if_eq}}
+      }{{#if_eq lintConfig "airbnb"}};{{/if_eq}}
+    }{{#if_eq lintConfig "airbnb"}},{{/if_eq}}
+  }{{#if_eq lintConfig "airbnb"}};{{/if_eq}}
 </script>
 
 <style scoped {{#sass}} lang="sass"{{/sass}}>
